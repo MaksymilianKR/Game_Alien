@@ -1,5 +1,6 @@
 import sys 
 import pygame
+from settings import Settings
 
 class AlienInvasion:
 
@@ -7,8 +8,9 @@ class AlienInvasion:
         """Inicjalizacja ry i utworzenie jej zasobów"""
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.settings = Settings()
         
-        self.screen = pygame.display.set_mode((1200, 800))
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Inwazja obcych")
         
         #zdefiniowanie koloru tła
@@ -21,7 +23,7 @@ class AlienInvasion:
                 if event.type == pygame.QUIT:
                     sys.exit()
             #Odświeżanie ekranu w trakcie każdej iteracji pętli
-            self.screen.fill(self.bg_color)
+            self.screen.fill(self.settings.bg_color)
 
             #wyświetlenie ostatnio zmodyfikowanego ekranu
             pygame.display.flip()
