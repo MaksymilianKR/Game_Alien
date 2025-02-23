@@ -6,6 +6,7 @@ class Ship:
         """Inicjalizacja statku kosmicznego i jego położenie początkowe"""
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
+        self.settings = ai_game.settings
 
         #Wczytywanie obrazu statku kosmicznego i pobranie jego prostokąta.
         self.image = pygame.image.load('C:/Users/maksy/Desktop/alien_invasion/images/DurrrSpaceShip.bmp')
@@ -14,6 +15,8 @@ class Ship:
         #Każdy nowy statek kosmiczne pojawia się na dole ekranu.
         self.rect.midbottom = self.screen_rect.midbottom
 
+        self.x = float(self.rect.x)
+
         #Opcje wskazujące na poruszanie się statku
         self.moving_right = False
         self.moving_left = False
@@ -21,9 +24,12 @@ class Ship:
     def update(self):
         """Uaktualnienie położenia statku na podstawie opcji wskazującej na jego ruch"""
         if self.moving_right:
-            self.rect.x += 1
+            self.x += self.settings.ship_speed
         if self.moving_left:
-            self.rect.x -= 1
+            self.x -= self.settings.ship_speed
+        
+        #Uaktualnienie obiektu rect na podstawie wartości self x
+        self.rect.x = self.x
 
 
     def blitme(self):
