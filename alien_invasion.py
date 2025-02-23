@@ -2,6 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship #,AlienShip <-- Do utworzenia obcego 
+from bullet import Bullet
 
 class AlienInvasion:
 
@@ -16,6 +17,7 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Inwazja obcych")
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
         #self._alien_ship_ = AlienShip(self) <- Do utworzenia obcego 
 
     def run_game(self):
@@ -23,6 +25,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
+            self.bullets.update()
             self._update_screen()
             self.clock.tick(60)
 
@@ -44,6 +47,8 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
     
     def _check_keyup_elemens(self, event):
         """Reakcja na zwolnienie klawisza"""
@@ -51,10 +56,17 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+
+    def _fire_bullet(self):
+        """Utworzenie nowego pocisku i dodanie go do grupy pocisków"""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
     
     def _update_screen(self):
         """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu"""
         self.screen.fill(self.settings.bg_color)
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         self.ship.blitme()
         #self._alien_ship_.blitme() <- do utworzenia obcego
         
