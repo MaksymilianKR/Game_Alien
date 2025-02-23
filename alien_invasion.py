@@ -25,9 +25,17 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
+
+            #Usunięcie pocisków, które znajdują się poza ekranem
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <= 0:
+                    self.bullets.remove(bullet)
+
+            self._update_screen()
+        self.clock.tick(60)
 
     def _check_events(self):
         """Reakcja na zdarzenia generowane przez klawiaturę i mysz"""
@@ -59,8 +67,18 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Utworzenie nowego pocisku i dodanie go do grupy pocisków"""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+
+    def _update_bullets(self):
+        """Uaktualnienie położenia pocisków i usunięcie tych niewidocznych na ekranie."""
+        #Uaktualnienie położenia pocisków
+        self.bullets.update()
+        #Usunięcie pocisków, które znajdują się poza ekranem
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
     
     def _update_screen(self):
         """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu"""
